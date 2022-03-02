@@ -95,6 +95,7 @@ public class Coordinator {
 			int operation;
 			
 			for(int i = 0;i < pendingOperations;i++) {
+			
 				operation = pendingList.remove(); // number
 				saida.writeInt(operation);
 				saida.flush();
