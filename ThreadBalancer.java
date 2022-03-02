@@ -39,7 +39,7 @@ public class ThreadBalancer extends Thread {
 						new ThreadBalancerServer(30000, request, server, idleServers).start();
 					
 				}else {
-					Thread.sleep(1000);
+					Thread.sleep(300);
 				}	
 				
 			}

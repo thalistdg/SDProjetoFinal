@@ -29,7 +29,7 @@ public class Client {
 				System.out.printf("%d - Cliente enviou: %d\n", count, num);
 				
 				clientSocket.close();
-				Thread.sleep(1000);
+				Thread.sleep(300);
 				++count;
 			}
 			
