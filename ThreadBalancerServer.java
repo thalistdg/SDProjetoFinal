@@ -8,14 +8,14 @@ public class ThreadBalancerServer extends Thread{
 	private int serverPort;
 	private int request;
 	private int serverNumber;
-	private Queue<Integer> idleServers;
+	private static Queue<Integer> idleServers;
 		
 	public ThreadBalancerServer(int serverPort, int request, int serverNumber, Queue<Integer> idleServers) {
 
 		this.serverPort = serverPort;
 		this.request = request;
 		this.serverNumber = serverNumber;
-		this.idleServers = idleServers;
+		ThreadBalancerServer.idleServers = idleServers;
 	
 	}
 
@@ -33,7 +33,7 @@ public class ThreadBalancerServer extends Thread{
 			int reply = entrada.readInt();
 
 			if(reply == request) {
-				addIdleServer();
+				addIdleServer(serverNumber);
 			}else {
 				System.out.println("Erro - Servidor retornou errado !!!");
 			}		
@@ -46,8 +46,8 @@ public class ThreadBalancerServer extends Thread{
 		
 	}
 	
-	public synchronized void addIdleServer() {
-		idleServers.add(serverNumber);
+	public synchronized static void addIdleServer(int sn) {
+		idleServers.add(sn);
 	}
 
 }

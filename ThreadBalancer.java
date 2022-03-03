@@ -1,14 +1,15 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class ThreadBalancer extends Thread {
+public class ThreadBalancer extends Thread{
 	
-	private Queue<Integer> requests;
-	public Queue<Integer> idleServers;
+	
+	private static Queue<Integer> requests;
+	private static Queue<Integer> idleServers;
 	
 	public ThreadBalancer(Queue<Integer> requests) {
-		this.requests = requests;
-		this.idleServers = new LinkedList<Integer>();
+		ThreadBalancer.requests = requests;
+		ThreadBalancer.idleServers = new LinkedList<Integer>();
 				
 		try {
 
@@ -25,18 +26,21 @@ public class ThreadBalancer extends Thread {
 		
 		try {
 			while(true) {	
-				System.out.printf("TB request/server size %d %d\n", requests.size(), idleServers.size());		
+				System.out.printf("TB requests/idleServers size %d/%d\n", requests.size(), idleServers.size());
+				
 				if(!requests.isEmpty() & !idleServers.isEmpty()) {
-			
+					
 					int request = removeRequest();
-					int server = removeIdleServer();			
+					int server = removeIdleServer(request);
 					
 					if(server == 1)
 						new ThreadBalancerServer(10000, request, server, idleServers).start();
 					else if(server == 2)
 						new ThreadBalancerServer(20000, request, server, idleServers).start();
-					else 
+					else if(server == 3)
 						new ThreadBalancerServer(30000, request, server, idleServers).start();
+					else
+						System.out.println("Erro TB -2");
 					
 				}else {
 					Thread.sleep(300);
@@ -50,11 +54,15 @@ public class ThreadBalancer extends Thread {
 	}
 	
 	public synchronized int removeRequest() {
-		return requests.remove();
+		if(!requests.isEmpty())
+			return requests.remove();
+		return -2;
 	}
 	
-	public synchronized int removeIdleServer() {
-		return idleServers.remove();
+	public synchronized int removeIdleServer(int r) {
+		if(r != -2 && !idleServers.isEmpty())
+			return idleServers.remove();
+		return -2;
 	}
 
 }

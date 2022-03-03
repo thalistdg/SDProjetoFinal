@@ -6,6 +6,8 @@ import java.util.Queue;
 
 public class Balancer {
 
+	private static Queue<Integer> requests;
+	
 	public static void main(String[] args) {
 		int port = 6000;
 		
@@ -14,7 +16,7 @@ public class Balancer {
 			ServerSocket serverSocket = new ServerSocket(port);
 			System.out.println("Balanceador ouvindo na porta " + port);
 			
-			Queue<Integer> requests = new LinkedList<Integer>();
+			requests = new LinkedList<Integer>();
 			
 			new ThreadBalancer(requests).start();
 			
